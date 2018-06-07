@@ -128,9 +128,10 @@ namespace GoogleCloudSamples
             return 0;
         }
 
-        public static int DeleteServiceAccount(string projectId, string email)
+        public static int DeleteServiceAccount(string projectId, string name)
         {
             // [START iam_delete_service_account]
+            string email = $"{name}@{projectId}.iam.gserviceaccount.com";
             string resource = $@"projects/{projectId}/serviceAccounts/{email}";
             iam.Projects.ServiceAccounts.Delete(resource).Execute();
 
