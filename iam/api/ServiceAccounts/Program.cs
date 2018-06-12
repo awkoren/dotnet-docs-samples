@@ -50,7 +50,7 @@ namespace GoogleCloudSamples
         [Option("name", HelpText = "The service account name.", Required = true)]
         public string Name { get; set; }
 
-        [Option("name", HelpText = "The servie account's new friendly display name.", Required = true)]
+        [Option("name", HelpText = "The service account's new friendly display name.", Required = true)]
         public string DisplayName { get; set; }
     }
 
