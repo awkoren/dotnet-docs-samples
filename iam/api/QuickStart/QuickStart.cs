@@ -27,13 +27,13 @@ public class QuickStart
         GoogleCredential credential = GoogleCredential.GetApplicationDefault()
             .CreateScoped(IamService.Scope.CloudPlatform);
 
-        // Create the IAM service object
+        // Create the Cloud IAM service object
         IamService iam = new IamService(new IamService.Initializer
         {
             HttpClientInitializer = credential
         });
 
-        // Call the IAM Roles API
+        // Call the Cloud IAM Roles API
         ListRolesResponse response = iam.Roles.List().Execute();
         IList<Role> roles = response.Roles;
 
