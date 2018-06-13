@@ -14,5 +14,4 @@
 import-module -DisableNameChecking ..\..\..\BuildTools.psm1
 
 dotnet restore
-dotnet build
-dotnet test --test-adapter-path:. --no-build
+dotnet test
