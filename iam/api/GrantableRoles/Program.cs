@@ -17,33 +17,36 @@ using Google.Apis.Auth.OAuth2;
 using Google.Apis.Iam.v1;
 using Google.Apis.Iam.v1.Data;
 
-class Program
+namespace GoogleCloudSamples
 {
-    static void Main(string[] args)
+    public class GrantableRoles
     {
-        var credential = GoogleCredential.GetApplicationDefault()
-            .CreateScoped(IamService.Scope.CloudPlatform);
-        var service = new IamService(new IamService.Initializer
+        public static void Main(string[] args)
         {
-            HttpClientInitializer = credential
-        });
+            var credential = GoogleCredential.GetApplicationDefault()
+                .CreateScoped(IamService.Scope.CloudPlatform);
+            var service = new IamService(new IamService.Initializer
+            {
+                HttpClientInitializer = credential
+            });
 
-        string fullResourceName = args[0];
+            string fullResourceName = args[0];
 
-        // [START iam_view_grantable_roles]
-        var request = new QueryGrantableRolesRequest
-        {
-            FullResourceName = fullResourceName
-        };
-        var response = service.Roles.QueryGrantableRoles(request).Execute();
+            // [START iam_view_grantable_roles]
+            var request = new QueryGrantableRolesRequest
+            {
+                FullResourceName = fullResourceName
+            };
+            var response = service.Roles.QueryGrantableRoles(request).Execute();
 
-        foreach (var role in response.Roles)
-        {
-            Console.WriteLine("Title: " + role.Title);
-            Console.WriteLine("Name: " + role.Name);
-            Console.WriteLine("Description: " + role.Description);
-            Console.WriteLine();
+            foreach (var role in response.Roles)
+            {
+                Console.WriteLine("Title: " + role.Title);
+                Console.WriteLine("Name: " + role.Name);
+                Console.WriteLine("Description: " + role.Description);
+                Console.WriteLine();
+            }
+            // [END iam_view_grantable_roles]
         }
-        // [END iam_view_grantable_roles]
     }
 }
