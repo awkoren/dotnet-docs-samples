@@ -30,7 +30,7 @@ namespace GoogleCloudSamples
         {
             ServiceAccountKey key = service.Projects.ServiceAccounts.Keys.Create(
                 new CreateServiceAccountKeyRequest(),
-                "projects/-/serviceAccounts/serviceAccountEmail/")
+                "projects/-/serviceAccounts/" + serviceAccountEmail)
                 .Execute();
 
             Console.WriteLine("Created key: " + key.Name);
@@ -42,12 +42,12 @@ namespace GoogleCloudSamples
         public static int ListKeys(string serviceAccountEmail)
         {
             IList<ServiceAccountKey> keys = service.Projects.ServiceAccounts.Keys
-                .List($"projects/serviceAccounts/{serviceAccountEmail}/keys")
+                .List($"projects/-/serviceAccounts/{serviceAccountEmail}")
                 .Execute().Keys;
 
             foreach (ServiceAccountKey key in keys)
             {
-                Console.WriteLine("Name: " + key.Name);
+                Console.WriteLine("Key: " + key.Name);
             }
             return 0;
         }
@@ -57,7 +57,7 @@ namespace GoogleCloudSamples
         public static int DeleteKey(string fullKeyName)
         {
             service.Projects.ServiceAccounts.Keys.Delete(fullKeyName).Execute();
-            Console.WriteLine("Deleted service account: " + fullKeyName);
+            Console.WriteLine("Deleted key: " + fullKeyName);
             return 0;
         }
         // [END iam_delete_key]
