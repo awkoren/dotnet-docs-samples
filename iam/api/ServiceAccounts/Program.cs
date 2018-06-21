@@ -21,49 +21,6 @@ using Google.Apis.Iam.v1.Data;
 
 namespace GoogleCloudSamples
 {
-    [Verb("service-accounts-create", HelpText = "Creates a service account.")]
-    internal class CreateServiceAccountOptions
-    {
-        [Option("project-id", HelpText = "The project Id.", Required = true)]
-        public string ProjectId { get; set; }
-
-        [Option("name", HelpText = "The service account's name.", Required = true)]
-        public string Name { get; set; }
-
-        [Option("display-name", HelpText = "The service account's friendly display name.")]
-        public string DisplayName { get; set; }
-    }
-
-    [Verb("service-accounts-list", HelpText = "Lists service accounts.")]
-    internal class ListServiceAccountOptions
-    {
-        [Option("project-id", HelpText = "The project Id.", Required = true)]
-        public string ProjectId { get; set; }
-    }
-
-    [Verb("service-accounts-rename", HelpText = "Updates a service account's display name.")]
-    internal class RenameServiceAccountOptions
-    {
-        [Option("project-id", HelpText = "The project Id.", Required = true)]
-        public string ProjectId { get; set; }
-
-        [Option("name", HelpText = "The service account name.", Required = true)]
-        public string Name { get; set; }
-
-        [Option("name", HelpText = "The service account's new friendly display name.", Required = true)]
-        public string DisplayName { get; set; }
-    }
-
-    [Verb("service-accounts-delete", HelpText = "Deletes a service account.")]
-    internal class DeleteServiceAccountOptions
-    {
-        [Option("project-id", HelpText = "The project Id.", Required = true)]
-        public string ProjectId { get; set; }
-
-        [Option("name", HelpText = "The service account's name.", Required = true)]
-        public string Name { get; set; }
-    }
-
     public static class Program
     {
         private static IamService iam;
