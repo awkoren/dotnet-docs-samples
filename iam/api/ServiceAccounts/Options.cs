@@ -19,7 +19,7 @@ namespace GoogleCloudSamples
     [Verb("create", HelpText = "Creates a service account.")]
     internal class CreateServiceAccountOptions
     {
-        [Option("project-id", HelpText = "The project Id.", Required = true)]
+        [Option("project-id", HelpText = "The project ID.", Required = true)]
         public string ProjectId { get; set; }
 
         [Option("name", HelpText = "The service account's name.", Required = true)]
@@ -32,30 +32,26 @@ namespace GoogleCloudSamples
     [Verb("list", HelpText = "Lists service accounts.")]
     internal class ListServiceAccountOptions
     {
-        [Option("project-id", HelpText = "The project Id.", Required = true)]
+        [Option("project-id", HelpText = "The project ID.", Required = true)]
         public string ProjectId { get; set; }
     }
 
     [Verb("rename", HelpText = "Updates a service account's display name.")]
     internal class RenameServiceAccountOptions
     {
-        [Option("project-id", HelpText = "The project Id.", Required = true)]
-        public string ProjectId { get; set; }
 
-        [Option("name", HelpText = "The service account name.", Required = true)]
-        public string Name { get; set; }
+        [Option("email", HelpText = "The service account email.", Required = true)]
+        public string Email { get; set; }
 
-        [Option("name", HelpText = "The service account's new friendly display name.", Required = true)]
+        [Option("display-name", HelpText = "The service account's new friendly display name.", Required = true)]
         public string DisplayName { get; set; }
     }
 
     [Verb("delete", HelpText = "Deletes a service account.")]
     internal class DeleteServiceAccountOptions
     {
-        [Option("project-id", HelpText = "The project Id.", Required = true)]
-        public string ProjectId { get; set; }
 
-        [Option("name", HelpText = "The service account's name.", Required = true)]
-        public string Name { get; set; }
+        [Option("email", HelpText = "The service account's email.", Required = true)]
+        public string Email { get; set; }
     }
 }

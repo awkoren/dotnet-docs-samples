@@ -24,11 +24,11 @@ namespace GoogleCloudSamples
     public static class Program
     {
         private static IamService iam;
-
+        
+        // [START iam_create_service_account]
         public static int CreateServiceAccount(string projectId, string name,
             string displayName)
         {
-            // [START iam_create_service_account]
             var request = new CreateServiceAccountRequest
             {
                 AccountId = name,
@@ -42,13 +42,13 @@ namespace GoogleCloudSamples
                 .Create(request, "projects/" + projectId).Execute();
 
             Console.WriteLine("Created service account: " + serviceAccount.Email);
-            // [END iam_create_service_account]
             return 0;
         }
+        // [END iam_create_service_account]
 
+        // [START iam_list_service_accounts]
         public static int ListServiceAccounts(string projectId)
         {
-            // [START iam_list_service_accounts]
             ListServiceAccountsResponse response = iam.Projects.ServiceAccounts
                 .List("projects/" + projectId).Execute();
             IList<ServiceAccount> serviceAccounts = response.Accounts;
@@ -60,17 +60,16 @@ namespace GoogleCloudSamples
                 Console.WriteLine("Email: " + account.Email);
                 Console.WriteLine();
             }
-            // [END iam_list_service_accounts]
             return 0;
         }
+        // [END iam_list_service_accounts]
 
-        public static int RenameServiceAccount(string projectId, string name,
+        // [START iam_rename_service_account]
+        public static int RenameServiceAccount(string email, 
             string newDisplayName)
         {
-            // [START iam_rename_service_account]
-            // First, get a ServiceAccount using List() Get()
-            string email = $"{name}@{projectId}.iam.gserviceaccount.com";
-            string resource = $@"projects/{projectId}/serviceAccounts/{email}";
+            // First, get a ServiceAccount using List() or Get()
+            string resource = "projects/-/serviceAccounts/" + email; 
             ServiceAccount serviceAccount = iam.Projects.ServiceAccounts
                 .Get(resource).Execute();
 
@@ -81,21 +80,20 @@ namespace GoogleCloudSamples
 
             Console.WriteLine($"Updated display name for {serviceAccount.Email} " +
                 "to: " + serviceAccount.DisplayName);
-            // [END iam_rename_service_account]
             return 0;
         }
+        // [END iam_rename_service_account]
 
-        public static int DeleteServiceAccount(string projectId, string name)
+        // [START iam_delete_service_account]
+        public static int DeleteServiceAccount(string email)
         {
-            // [START iam_delete_service_account]
-            string email = $"{name}@{projectId}.iam.gserviceaccount.com";
-            string resource = $@"projects/{projectId}/serviceAccounts/{email}";
+            string resource = "projects/-/serviceAccounts/" + email; 
             iam.Projects.ServiceAccounts.Delete(resource).Execute();
 
             Console.WriteLine("Deleted service account: " + email);
-            // [END iam_delete_service_account]
             return 0;
         }
+        // [END iam_delete_service_account]
 
         public static void Main(string[] args)
         {
@@ -117,9 +115,9 @@ namespace GoogleCloudSamples
                 (ListServiceAccountOptions x) => ListServiceAccounts(
                     x.ProjectId),
                 (RenameServiceAccountOptions x) => RenameServiceAccount(
-                    x.ProjectId, x.Name, x.DisplayName),
+                    x.Email, x.DisplayName),
                 (DeleteServiceAccountOptions x) => DeleteServiceAccount(
-                    x.ProjectId, x.Name),
+                    x.Email),
                 error => 1);
         }
     }
