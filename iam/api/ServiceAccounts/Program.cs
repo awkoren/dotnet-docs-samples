@@ -24,10 +24,15 @@ namespace GoogleCloudSamples
     public static class Program
     {
         private static IamService iam;
+
+        static Program()
+        {
+
+        }   
         
         // [START iam_create_service_account]
-        public static int CreateServiceAccount(string projectId, string name,
-            string displayName)
+        public static ServiceAccount CreateServiceAccount(string projectId, 
+            string name, string displayName)
         {
             var request = new CreateServiceAccountRequest
             {
@@ -42,12 +47,12 @@ namespace GoogleCloudSamples
                 .Create(request, "projects/" + projectId).Execute();
 
             Console.WriteLine("Created service account: " + serviceAccount.Email);
-            return 0;
+            return serviceAccount;
         }
         // [END iam_create_service_account]
 
         // [START iam_list_service_accounts]
-        public static int ListServiceAccounts(string projectId)
+        public static IList<ServiceAccount> ListServiceAccounts(string projectId)
         {
             ListServiceAccountsResponse response = iam.Projects.ServiceAccounts
                 .List("projects/" + projectId).Execute();
@@ -60,12 +65,12 @@ namespace GoogleCloudSamples
                 Console.WriteLine("Email: " + account.Email);
                 Console.WriteLine();
             }
-            return 0;
+            return serviceAccounts;
         }
         // [END iam_list_service_accounts]
 
         // [START iam_rename_service_account]
-        public static int RenameServiceAccount(string email, 
+        public static ServiceAccount RenameServiceAccount(string email, 
             string newDisplayName)
         {
             // First, get a ServiceAccount using List() or Get()
@@ -80,22 +85,50 @@ namespace GoogleCloudSamples
 
             Console.WriteLine($"Updated display name for {serviceAccount.Email} " +
                 "to: " + serviceAccount.DisplayName);
-            return 0;
+            return serviceAccount;
         }
         // [END iam_rename_service_account]
 
         // [START iam_delete_service_account]
-        public static int DeleteServiceAccount(string email)
+        public static void DeleteServiceAccount(string email)
         {
             string resource = "projects/-/serviceAccounts/" + email; 
             iam.Projects.ServiceAccounts.Delete(resource).Execute();
 
             Console.WriteLine("Deleted service account: " + email);
-            return 0;
         }
         // [END iam_delete_service_account]
 
         public static void Main(string[] args)
+        {
+            Init();
+            
+            Parser.Default.ParseArguments<
+                CreateServiceAccountOptions,
+                ListServiceAccountOptions,
+                RenameServiceAccountOptions,
+                DeleteServiceAccountOptions
+                >(args).MapResult(
+                (CreateServiceAccountOptions x) => { 
+                    CreateServiceAccount(x.ProjectId, x.Name, x.DisplayName);
+                    return 0;
+                },
+                (ListServiceAccountOptions x) => {
+                    ListServiceAccounts(x.ProjectId);
+                    return 0;
+                },
+                (RenameServiceAccountOptions x) => {
+                    RenameServiceAccount(x.Email, x.DisplayName);
+                    return 0;
+                },
+                (DeleteServiceAccountOptions x) => {
+                    DeleteServiceAccount(x.Email);
+                    return 0;
+                },
+                error => 1);
+        }
+
+        public static void Init()
         {
             GoogleCredential credential = GoogleCredential.GetApplicationDefault()
                 .CreateScoped(IamService.Scope.CloudPlatform);
@@ -104,21 +137,6 @@ namespace GoogleCloudSamples
                 HttpClientInitializer = credential
             });
 
-            Parser.Default.ParseArguments<
-                CreateServiceAccountOptions,
-                ListServiceAccountOptions,
-                RenameServiceAccountOptions,
-                DeleteServiceAccountOptions
-                >(args).MapResult(
-                (CreateServiceAccountOptions x) => CreateServiceAccount(
-                    x.ProjectId, x.Name, x.DisplayName),
-                (ListServiceAccountOptions x) => ListServiceAccounts(
-                    x.ProjectId),
-                (RenameServiceAccountOptions x) => RenameServiceAccount(
-                    x.Email, x.DisplayName),
-                (DeleteServiceAccountOptions x) => DeleteServiceAccount(
-                    x.Email),
-                error => 1);
         }
     }
 }
